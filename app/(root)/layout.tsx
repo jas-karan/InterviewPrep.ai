@@ -1,8 +1,12 @@
 import React, { ReactNode } from 'react'
+import { toast, Toaster } from 'sonner'
 
 const RootLayout = ({children}:{children: ReactNode}) => {
   return (
-    <div>{children}</div>
+    <div className="auth-layout">
+      {children}
+      <Toaster position="top-right" richColors />
+    </div>
   )
 }
 
