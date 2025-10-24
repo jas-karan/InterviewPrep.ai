@@ -4,7 +4,6 @@ import React from 'react'
 import Image from 'next/image'
 import { dummyInterviews } from '@/constants'
 import InterviewCard from '@/components/InterviewCard'
-import { int } from 'zod'
 
 const page = () => {
   return (
@@ -14,7 +13,7 @@ const page = () => {
         <h2>Get Interview Ready with AI powered practice and feedback</h2>
         
         <p className='text-lg'>
-          Practice on real interview questions, get instant feedback, and improve your skills with our AI-powered platform. Whether you're a beginner or an experienced professional, our tool is designed to help you succeed in your job interviews.
+          Practice on real interview questions, get instant feedback, and improve your skills with our AI-powered platform. 
         </p>
 
         <Button asChild className='btn-primary max-sm:w-full'>
