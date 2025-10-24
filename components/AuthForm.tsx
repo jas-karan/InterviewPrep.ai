@@ -13,6 +13,9 @@ import Link from "next/link"
 import { toast } from "sonner"
 import FormField from "./FormField"
 import { useRouter } from "next/navigation"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "@/firebase/client"
+import { signIn, signUp } from "@/lib/actions/auth.action"
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -41,17 +44,44 @@ const AuthForm = ({ type }: { type: FormType }) => {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         try{
             if(type === "sign-in"){
-                // Sign-in logic here
-                console.log("Signing in with values:", values);
+                const {email, password} = values;
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+                const idToken = await userCredential.user.getIdToken();
+                if(!idToken){
+                    toast.error("Sign-in failed: Unable to retrieve ID token.");
+                    return;
+                }
+
+                await signIn({
+                    email: email,
+                    idToken: idToken
+                })
+
+
                 toast.success("Signed in successfully!");
                 router.push('/');
             }
             else{
-                // Sign-up logic here
-                console.log("Signing up with values:", values);
+                const {name, email, password} = values;
+                const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+
+                const result = await signUp({
+                    uid: userCredentials.user.uid,
+                    name: name!,
+                    email: email,
+                    password: password
+                })
+
+                if(!result?.success){
+                    toast.error(`Sign-up failed: ${result?.message}`);
+                    return;
+                }
+
                 toast.success("Account created successfully!");
                 router.push('/sign-in');
             }
