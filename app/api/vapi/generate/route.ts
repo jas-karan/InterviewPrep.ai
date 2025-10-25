@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         const { text: questions } = await generateText({
             model: google('gemini-2.0-flash-001'),
             prompt: `Prepare questions for a job interview.
-        The job role is ${role}.
+                The job role is ${role}.
         The job experience level is ${level}.
         The tech stack used in the job is: ${techstack}.
         The focus between behavioural and technical questions should lean towards: ${type}.
